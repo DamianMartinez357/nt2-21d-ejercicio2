@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Ejemplo 1</title>
+    <title>TP2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -14,9 +14,21 @@
 
 
 <div class="container-fluid mt-3" id="app">
-    <input type="text" class="form-control" v-model="criterioDeBusqueda"
-        placeholder="Ingresar un criterio de busqueda...">
+    <input type="text" class="form-control" v-model="criterioDeBusquedaGral"
+        placeholder="Ingrese un criterio de busqueda:">
     <br>
+    <input type="text" class="form-control" v-model="criterioDeBusquedaNombre"
+            placeholder="Ingrese un Nombre o Apellido a buscar:">
+            <br>
+   <input type="text" class="form-control" v-model="criterioDeBusquedaDNI"
+            placeholder="Ingrese un DNI:">
+    <br>
+    <div v-if="cantCaracteres >= 0 && cantCaracteres < 2" class="alert alert-danger">
+        <p > Ingrese {{MINCARACTERES - cantCaracteres}} caracteres para iniciar la busqueda</p>
+    </div>
+    <div v-else-if="cantCaracteres == 2" class="alert alert-danger">
+        <p > Ingrese {{MINCARACTERES - cantCaracteres}} caracter más para iniciar la busqueda</p>
+    </div>
     <div class="card-deck m-0">
         <div class="row">
             <div class="col" v-for="persona in personasFiltradas">
@@ -39,8 +51,10 @@
     new Vue({
         el: '#app',
         data: {
-            criterioDeBusqueda: '',
-            //Aquí, en este array es donde tienen que agregar su información
+            criterioDeBusquedaGral: '',
+            criterioDeBusquedaNombre: '',
+            criterioDeBusquedaDNI: '',
+            
             personas: [
                 {
                     nombre: "Daniel",
@@ -49,26 +63,57 @@
                     dni: "20442873"
                 },
                 {
-                    nombre: "...",
-                    apellido: "...",
-                    correo: "...",
-                    dni: "..."
+                    nombre: "Damian",
+                    apellido: "Martinez",
+                    correo: "dada@gmail.com",
+                    dni: "123454"
+                },
+                {
+                    nombre: "Damiancito",
+                    apellido: "Martinecito",
+                    correo: "dada357@gmail.com",
+                    dni: "11111"
+                },
+                {
+                    nombre: "Jesica",
+                    apellido: "Filippi",
+                    correo: "jesi357@gmail.com",
+                    dni: "11222"
                 },
             ]
 
         },
+
+        const: MINCARACTERES = 3,
+
         computed: {
             personasFiltradas() {
+                if(this.criterioDeBusquedaGral.length < MINCARACTERES && this.criterioDeBusquedaNombre.length < MINCARACTERES && this.criterioDeBusquedaDNI.length < MINCARACTERES){
+                return this.personas
+                } else {
                 return this.personas.filter((persona) => {
                     let registroCompleto = `${persona.nombre} ${persona.apellido} ${persona.dni} ${persona.correo}`
-                    return registroCompleto.toLowerCase().includes(this.criterioDeBusqueda.toLowerCase())
-                });
+                    let registroNombreYApellido =`${persona.nombre} ${persona.apellido}`                 
+                    let registroDNI =`${persona.dni}`                 
+                    return registroCompleto.toLowerCase().includes(this.criterioDeBusquedaGral.toLowerCase()) &&  registroNombreYApellido.toLowerCase().includes(this.criterioDeBusquedaNombre.toLowerCase())  &&  registroDNI.toLowerCase().includes(this.criterioDeBusquedaDNI.toLowerCase())
+                }); 
+            }},
+            
+            cantCaracteres() {
+                let cant = this.criterioDeBusquedaGral.length
+                let cant1 = this.criterioDeBusquedaNombre.length
+                let cant2 = this.criterioDeBusquedaDNI.length
+
+                let cantMayor = Math.max(cant, cant1, cant2);
+                return cantMayor;
             }
+
         },
         methods: {
             getNombreCompleto(persona) {
                 return `${persona.nombre} ${persona.apellido}`
             }
+
         }
-    });
+    });   
 </script>
