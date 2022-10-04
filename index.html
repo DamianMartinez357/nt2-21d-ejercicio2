@@ -24,7 +24,7 @@
             placeholder="Ingrese un DNI:">
     <br>
     <div v-if="cantCaracteres >= 0 && cantCaracteres < 2" class="alert alert-danger">
-        <p > Ingrese {{MINCARACTERES - cantCaracteres}} caracteres para iniciar la busqueda</p>
+        <p > Ingrese al menos {{MINCARACTERES - cantCaracteres}} caracteres para iniciar la busqueda</p>
     </div>
     <div v-else-if="cantCaracteres == 2" class="alert alert-danger">
         <p > Ingrese {{MINCARACTERES - cantCaracteres}} caracter más para iniciar la busqueda</p>
@@ -69,7 +69,7 @@
                     dni: "123454"
                 },
                 {
-                    nombre: "Damiancito",
+                    nombre: "JUAN CARLOS",
                     apellido: "Martinecito",
                     correo: "dada357@gmail.com",
                     dni: "11111"
@@ -94,7 +94,8 @@
                 return this.personas.filter((persona) => {
                     let registroCompleto = `${persona.nombre} ${persona.apellido} ${persona.dni} ${persona.correo}`
                     let registroNombreYApellido =`${persona.nombre} ${persona.apellido}`                 
-                    let registroDNI =`${persona.dni}`                 
+                    let registroDNI =`${persona.dni}`
+
                     return registroCompleto.toLowerCase().includes(this.criterioDeBusquedaGral.toLowerCase()) &&  registroNombreYApellido.toLowerCase().includes(this.criterioDeBusquedaNombre.toLowerCase())  &&  registroDNI.toLowerCase().includes(this.criterioDeBusquedaDNI.toLowerCase())
                 }); 
             }},
